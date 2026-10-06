@@ -35,19 +35,29 @@ def flawed_benchmark():
     """
     print("Running flawed benchmark...")
     
-    n = 1000
+    size = [100, 1000, 5000, 10000, 50000, 100000]
+
+    for n in size:
+        slow_times = []
+        fast_times = []
+        data = [random.randint(0, 100000) for _ in range(n)]
+
+        for j in range (0, 10):
+            start_time = time.perf_counter()
+            find_duplicates_slow(data)
+            end_time = time.perf_counter()
+            slow_times.append(end_time - start_time)
     
-    start_time = time.time()
-    data1 = [random.randint(i, 10000) for i in range(n)]
-    find_duplicates_slow(data1)
-    end_time = time.time()
-    print(f"Slow algorithm took: {end_time - start_time} seconds")
-    
-    start_time_2 = time.time()
-    data2 = [random.randint(i, 10000) for i in range(n)]
-    find_duplicates_fast(data2)
-    end_time_2 = time.time()
-    print(f"Fast algorithm took: {end_time_2 - start_time_2} seconds")
+            start_time_2 = time.perf_counter()
+            find_duplicates_fast(data)
+            end_time_2 = time.perf_counter()
+            fast_times.append(end_time_2 - start_time_2)
+        fast_average = sum(fast_times) / 10
+        slow_average = sum(slow_times) / 10
+        print(f"for n = {n} (n = size)")
+        print(f"Fast alg average time = {fast_average} seconds")
+        print(f"Slow alg average time = {slow_average} seconds")
+        print()
 
 
 if __name__ == "__main__":
