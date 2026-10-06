@@ -1,5 +1,6 @@
 import time
 import random
+import matplotlib.pyplot as plt
 
 # =======================================================
 # DO NOT MODIFY THE ALGORITHM IMPLEMENTATIONS
@@ -35,12 +36,14 @@ def flawed_benchmark():
     """
     print("Running flawed benchmark...")
     
-    size = [100, 1000, 5000, 10000, 50000, 100000]
+    size = [100, 1000, 2500, 5000, 7500, 10000]
+    slow_list = []
+    fast_list = []
 
     for n in size:
         slow_times = []
         fast_times = []
-        data = [random.randint(0, 100000) for _ in range(n)]
+        data = list(range(n))
 
         for j in range (0, 10):
             start_time = time.perf_counter()
@@ -54,10 +57,21 @@ def flawed_benchmark():
             fast_times.append(end_time_2 - start_time_2)
         fast_average = sum(fast_times) / 10
         slow_average = sum(slow_times) / 10
+        slow_list.append(slow_average)
+        fast_list.append(fast_average)
         print(f"for n = {n} (n = size)")
         print(f"Fast alg average time = {fast_average} seconds")
         print(f"Slow alg average time = {slow_average} seconds")
         print()
+
+    plt.plot(size, fast_list, label="fast average time", color="red", marker="o")
+    plt.plot(size, slow_list, label="slow average time", color="blue", marker="s")
+    plt.title("Comparing fast vs slow algorithms with different size lists")
+    plt.xlabel("size of list (n)")
+    plt.ylabel("average time (seconds)")
+    plt.legend()
+    plt.grid((True))
+    plt.savefig('results.png', dpi=300, bbox_inches='tight')
 
 
 if __name__ == "__main__":
